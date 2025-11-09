@@ -1,0 +1,465 @@
+<!--  <!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Prescription List</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body class="prescription-list-page">   css class use
+<div class="list-container">
+<h2>Prescription List</h2>
+
+<form method="get" action="#" th:action="@{/prescriptions}">
+    <label>Start Date:</label>
+    <input type="date" name="startDate">
+    <label>End Date:</label>
+    <input type="date" name="endDate">
+    <button type="submit">Filter</button>
+</form>
+
+<a th:href="@{/prescriptions/create}">Add New Prescription</a>
+<a th:href="@{/prescriptions/report}">View Report</a>
+<a th:href="@{/logout}">Logout</a>
+
+<table border="1">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Date</th>
+        <th>Patient Name</th>
+        <th>Age</th>
+        <th>Gender</th>
+        <th>Diagnosis</th>
+        <th>Medicines</th>
+        <th>Next Visit</th>
+        <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="p : ${prescriptions}">
+        <td th:text="${p.id}"></td>
+        <td th:text="${p.prescriptionDate}"></td>
+        <td th:text="${p.patientName}"></td>
+        <td th:text="${p.patientAge}"></td>
+        <td th:text="${p.patientGender}"></td>
+        <td th:text="${p.diagnosis}"></td>
+        <td th:text="${p.medicines}"></td>
+        <td th:text="${p.nextVisitDate}"></td>
+        <td>
+            <a th:href="@{'/prescriptions/edit/' + ${p.id}}">Edit</a> |
+            <a th:href="@{'/prescriptions/delete/' + ${p.id}}" 
+               onclick="return confirm('Are you sure?');">Delete</a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+ </div>
+</body>
+</html> 
+  -->
+ 
+ 
+<!-- 
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Prescription List</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body class="prescription-list-page">
+    <div class="list-container">
+        Header Section
+        <div class="list-header">
+            <h2>📋 Prescription Management</h2>
+            <p>Manage and view all patient prescriptions</p>
+        </div>
+
+        Filter Card
+        <div class="filter-card">
+            <h3>Filter Prescriptions</h3>
+            <form method="get" th:action="@{/prescriptions}" class="filter-form">
+                <div class="filter-group">
+                    <label>📅 Start Date</label>
+                    <input type="date" name="startDate" placeholder="Select start date">
+                </div>
+                <div class="filter-group">
+                    <label>📅 End Date</label>
+                    <input type="date" name="endDate" placeholder="Select end date">
+                </div>
+                <div class="filter-group">
+                    <button type="submit" class="filter-btn">
+                        🔍 Apply Filter
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        Action Buttons Card
+        <div class="action-card">
+            <h3>Quick Actions</h3>
+            <div class="action-buttons">
+                <a th:href="@{/prescriptions/create}" class="action-btn primary">
+                    ➕ Add New Prescription
+                </a>
+                <a th:href="@{/prescriptions/report}" class="action-btn secondary">
+                    📊 View Report
+                </a>
+                <a th:href="@{/logout}" class="action-btn danger">
+                    🚪 Logout
+                </a>
+            </div>
+        </div>
+
+        Table Card
+        <div class="table-card">
+            <div class="table-header">
+                <h3>All Prescriptions</h3>
+                <div class="table-info">
+                    <span>📊 Total: <strong th:text="${prescriptions.size()}">0</strong> prescriptions</span>
+                    <span>🕐 Last updated: <span th:text="${#temporals.format(#temporals.createNow(), 'dd MMM yyyy HH:mm')}"></span></span>
+                </div>
+            </div>
+            
+            <div class="table-responsive">
+                <table class="prescription-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Date</th>
+                            <th>Patient Name</th>
+                            <th>Age</th>
+                            <th>Gender</th>
+                            <th>Diagnosis</th>
+                            <th>Medicines</th>
+                            <th>Next Visit</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="p : ${prescriptions}">
+                            <td th:text="${p.id}"></td>
+                            <td th:text="${#temporals.format(p.prescriptionDate, 'dd/MM/yyyy')}"></td>
+                            <td>
+                                <strong th:text="${p.patientName}"></strong>
+                            </td>
+                            <td th:text="${p.patientAge}"></td>
+                            <td>
+                                <span th:text="${p.patientGender}" 
+                                      th:class="${p.patientGender == 'Male'} ? 'status-badge status-active' : 'status-badge status-pending'">
+                                </span>
+                            </td>
+                            <td>
+                                <span th:if="${p.diagnosis}" th:text="${p.diagnosis}"></span>
+                                <span th:unless="${p.diagnosis}" class="text-muted">-</span>
+                            </td>
+                            <td>
+                                <span th:if="${p.medicines}" th:text="${p.medicines}"></span>
+                                <span th:unless="${p.medicines}" class="text-muted">-</span>
+                            </td>
+                            <td>
+                                <span th:if="${p.nextVisitDate}" 
+                                      th:text="${#temporals.format(p.nextVisitDate, 'dd/MM/yyyy')}"
+                                      class="status-badge status-active">
+                                </span>
+                                <span th:unless="${p.nextVisitDate}" class="text-muted">-</span>
+                            </td>
+                            <td>
+                                <div class="action-links">
+                                    <a th:href="@{'/prescriptions/edit/' + ${p.id}}" class="edit-btn">
+                                        ✏️ Edit
+                                    </a>
+                                    <a th:href="@{'/prescriptions/delete/' + ${p.id}}" 
+                                       onclick="return confirm('Are you sure you want to delete this prescription?');"
+                                       class="delete-btn">
+                                        🗑️ Delete
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr th:if="${prescriptions.empty}">
+                            <td colspan="9">
+                                <div class="no-data">
+                                    <div>📝</div>
+                                    <h4>No Prescriptions Found</h4>
+                                    <p>No prescription records available. Start by adding a new prescription.</p>
+                                    <a th:href="@{/prescriptions/create}" class="action-btn primary" style="margin-top: 15px;">
+                                        ➕ Add First Prescription
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+</html> 
+  -->
+  
+  
+  
+  <!-- modify code -->
+  
+  <!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Prescription List</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body class="prescription-list-page">
+<div class="list-container">
+
+    <!-- Header -->
+    <div class="list-header">
+        <h2>📋 Prescription Management</h2>
+        <p>Manage and view all patient prescriptions</p>
+    </div>
+
+    <!-- Filter Form -->
+    <div class="filter-card">
+        <h3>Filter Prescriptions</h3>
+        <form method="get" th:action="@{/prescriptions}" class="filter-form">
+            <div class="filter-group">
+                <label>📅 Start Date</label>
+                <input type="date" name="startDate" placeholder="Select start date">
+            </div>
+            <div class="filter-group">
+                <label>📅 End Date</label>
+                <input type="date" name="endDate" placeholder="Select end date">
+            </div>
+            <div class="filter-group">
+                <button type="submit" class="filter-btn">🔍 Apply Filter</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="action-card">
+        <h3>Quick Actions</h3>
+        <div class="action-buttons">
+            <a th:href="@{/prescriptions/create}" class="action-btn primary">➕ Add New Prescription</a>
+            <a th:href="@{/prescriptions/report}" class="action-btn secondary">📊 View Report</a>
+            <a th:href="@{/logout}" class="action-btn danger">🚪 Logout</a>
+        </div>
+    </div>
+
+    <!-- Prescription Table -->
+    <div class="table-card">
+        <div class="table-header">
+            <h3>All Prescriptions</h3>
+            <div class="table-info">
+                <span>📊 Total: <strong th:text="${prescriptions.size()}">0</strong></span>
+                <span>🕐 Last updated: <span th:text="${#temporals.format(#temporals.createNow(), 'dd MMM yyyy HH:mm')}"></span></span>
+            </div>
+        </div>
+
+        <div class="table-responsive">
+            <table class="prescription-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Date</th>
+                        <th>Patient Name</th>
+                        <th>Age</th>
+                        <th>Gender</th>
+                        <th>Diagnosis</th>
+                        <th>Medicines</th>
+                        <th>Next Visit</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="p : ${prescriptions}">
+                        <td th:text="${p.id}"></td>
+                        <td th:text="${#temporals.format(p.prescriptionDate, 'dd/MM/yyyy')}"></td>
+                        <td><strong th:text="${p.patientName}"></strong></td>
+                        <td th:text="${p.patientAge}"></td>
+                        <td>
+                            <span th:text="${p.patientGender}"
+                                  th:classappend="${p.patientGender == 'Male'} ? 'status-badge status-active' : 'status-badge status-pending'">
+                            </span>
+                        </td>
+                        <td>
+                            <span th:if="${p.diagnosis}" th:text="${p.diagnosis}"></span>
+                            <span th:unless="${p.diagnosis}" class="text-muted">-</span>
+                        </td>
+                        <td>
+                            <span th:if="${p.medicines}" th:text="${p.medicines}"></span>
+                            <span th:unless="${p.medicines}" class="text-muted">-</span>
+                        </td>
+                        <td>
+                            <span th:if="${p.nextVisitDate}"
+                                  th:text="${#temporals.format(p.nextVisitDate, 'dd/MM/yyyy')}"
+                                  class="status-badge status-active"></span>
+                            <span th:unless="${p.nextVisitDate}" class="text-muted">-</span>
+                        </td>
+                        <td>
+                            <div class="action-links">
+                                <a th:href="@{'/prescriptions/edit/' + ${p.id}}" class="edit-btn">✏️ Edit</a>
+                                <a th:href="@{'/prescriptions/delete/' + ${p.id}}"
+                                   onclick="return confirm('Are you sure you want to delete this prescription?');"
+                                   class="delete-btn">🗑️ Delete</a>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <tr th:if="${#lists.isEmpty(prescriptions)}">
+                        <td colspan="9">
+                            <div class="no-data">
+                                <div>📝</div>
+                                <h4>No Prescriptions Found</h4>
+                                <p>No prescription records available. Start by adding a new one.</p>
+                                <a th:href="@{/prescriptions/create}" class="action-btn primary">➕ Add First Prescription</a>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+</body>
+</html>
+  
+ 
+ 
+ 
+ 
+ 
+ <!-- 
+ <!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Prescription Report</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body class="report-page">
+    <div class="report-container">
+        Report Header
+        <div class="report-header">
+            <h2>📈 Prescription Analytics Report</h2>
+            <p>Comprehensive day-wise prescription analysis and insights</p>
+        </div>
+
+        Back Button
+        <div class="back-btn-container">
+            <a th:href="@{/prescriptions}" class="back-btn">
+                ← Back to Prescription List
+            </a>
+        </div>
+
+        Report Summary Cards
+        <div class="report-summary">
+            <div class="summary-card">
+                <div class="icon">📅</div>
+                <div class="number" th:text="${reportData.size()}">0</div>
+               th:if="${reportData != null and #lists.size(reportData) > 0}">
+                <div class="label">Total Days</div>
+            </div>
+            <div class="summary-card">
+                <div class="icon">💊</div>
+                <div class="number" th:text="${totalPrescriptions}">0</div>
+                <div class="label">Total Prescriptions</div>
+            </div>
+            <div class="summary-card">
+                <div class="icon">📈</div>
+                <div class="number" th:text="${averagePerDay}">0</div>
+                <div class="label">Avg Per Day</div>
+            </div>
+            <div class="summary-card">
+                <div class="icon">⭐</div>
+                <div class="number" th:text="${busiestDay != null ? busiestDay[1] : '0'}">0</div>
+                <div class="label">Peak Day Count</div>
+            </div>
+        </div>
+
+        Report Table Card
+        <div class="report-table-card">
+            <div class="report-table-header">
+                <h3>Day-wise Prescription Statistics</h3>
+                <p>Detailed breakdown of prescriptions by date</p>
+            </div>
+            
+            <div class="table-responsive">
+                <table class="report-table">
+                    <thead>
+                        <tr>
+                            <th>📅 Date</th>
+                            <th>💊 Total Prescriptions</th>
+                            <th>📊 Percentage</th>
+                            <th>⭐ Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="r, stat : ${reportData}" 
+                            th:class="${stat.index == 0} ? 'highlight' : ''">
+                            <td th:text="${r[0]}">Date</td>
+                            <td th:text="${r[1]}">Count</td>
+                            <td>
+                                <span th:if="${totalPrescriptions > 0}" 
+                                      th:text="${#numbers.formatDecimal((r[1] / totalPrescriptions) * 100, 1, 1)} + '%'">
+                                </span>
+                                <span th:unless="${totalPrescriptions > 0}">0%</span>
+                            </td>
+                            <td>
+                                <span th:if="${stat.index == 0}" class="status-badge status-active">
+                                    🏆 Peak Day
+                                </span>
+                                <span th:if="${r[1] > averagePerDay && stat.index != 0 && totalPrescriptions > 0}" 
+                                      class="status-badge status-pending">
+                                    📈 Above Avg
+                                </span>
+                                <span th:if="${(r[1] <= averagePerDay && stat.index != 0 && totalPrescriptions > 0) || totalPrescriptions == 0}" 
+                                      class="status-badge">
+                                    📉 Normal
+                                </span>
+                            </td>
+                        </tr>
+                        <tr th:if="${reportData.empty}">
+                            <td colspan="4">
+                                <div class="no-report-data">
+                                    <div class="icon">📊</div>
+                                    <h4>No Report Data Available</h4>
+                                    <p>No prescription data found for generating reports.</p>
+                                    <a th:href="@{/prescriptions/create}" class="action-btn primary">
+                                        ➕ Add First Prescription
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        Chart Placeholder
+        <div class="report-chart">
+            <h4>📈 Prescription Trends Visualization</h4>
+            <div class="chart-placeholder">
+                <div class="icon">📊</div>
+                <p>Prescription distribution chart would be displayed here</p>
+                <small>Visual representation of day-wise prescription patterns</small>
+            </div>
+        </div>
+
+        Export Actions
+        <div class="export-actions">
+            <a href="#" class="export-btn">
+                📄 Export as Excel
+            </a>
+            <a href="#" class="export-btn pdf">
+                📊 Export as PDF
+            </a>
+        </div>
+    </div>
+</body>
+</html>
+  -->
+ 
+ 

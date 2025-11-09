@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Prescription Form</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <script th:src="@{/js/validation.js}"></script>
+</head>
+<body class="prescription-form-page">    <!-- css class use -->
+<div class="prescription-form-container">
+<h2 th:text="${prescription.id} != null ? 'Edit Prescription' : 'Add Prescription'"></h2>
+
+<form th:action="${prescription.id} != null ? @{'/prescriptions/update/' + ${prescription.id}} : @{/prescriptions/save}" 
+      th:object="${prescription}" method="post" onsubmit="return validateForm()">
+
+    <label>Date:</label>
+    <input type="date" th:field="*{prescriptionDate}" required><br>
+
+    <label>Patient Name:</label>
+    <input type="text" th:field="*{patientName}" required><br>
+
+    <label>Age:</label>
+    <input type="number" th:field="*{patientAge}" required><br>
+
+    <label>Gender:</label>
+    <select th:field="*{patientGender}" required>
+        <option value="Male">Male</option>
+        <option value="Female">Female</option>
+    </select><br>
+
+    <label>Diagnosis:</label>
+    <textarea th:field="*{diagnosis}"></textarea><br>
+
+    <label>Medicines:</label>
+    <textarea th:field="*{medicines}"></textarea><br>
+
+    <label>Next Visit Date:</label>
+    <input type="date" th:field="*{nextVisitDate}"><br>
+
+    <button type="submit">Save</button>
+    <a th:href="@{/prescriptions}">Cancel</a>
+</form>
+</div>
+</body>
+</html>

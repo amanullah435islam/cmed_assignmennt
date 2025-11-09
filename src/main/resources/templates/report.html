@@ -1,0 +1,291 @@
+<!-- <!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Prescription Report</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body class="report-page"> css class use
+<div class="report-container">
+<h2>Day-wise Prescription Report</h2>
+<a th:href="@{/prescriptions}">Back to List</a>
+
+<table border="1">
+    <thead>
+    <tr>
+        <th>Date</th>
+        <th>Total Prescriptions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="r : ${reportData}">
+        <td th:text="${r[0]}"></td>
+        <td th:text="${r[1]}"></td>
+    </tr>
+    </tbody>
+</table>
+</div>
+</body>
+</html>
+ -->
+ 
+ 
+ 
+ 
+ <!-- 
+ <!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Prescription Report</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body class="report-page">
+    <div class="report-container">
+        Report Header
+        <div class="report-header">
+            <h2>📈 Prescription Analytics Report</h2>
+            <p>Comprehensive day-wise prescription analysis and insights</p>
+        </div>
+
+        Back Button
+        <div class="back-btn-container">
+            <a th:href="@{/prescriptions}" class="back-btn">
+                ← Back to Prescription List
+            </a>
+        </div>
+
+        Report Summary Cards
+        <div class="report-summary">
+            <div class="summary-card">
+                <div class="icon">📅</div>
+                <div class="number" th:text="${reportData.size()}">0</div>
+                <div th:if="${reportData != null and #lists.size(reportData) > 0}">
+                <div class="label">Total Days</div>
+            </div>
+            <div class="summary-card">
+                <div class="icon">💊</div>
+                <div class="number" th:text="${totalPrescriptions}">0</div>
+                <div class="label">Total Prescriptions</div>
+            </div>
+            <div class="summary-card">
+                <div class="icon">📈</div>
+                <div class="number" th:text="${averagePerDay}">0</div>
+                <div class="label">Avg Per Day</div>
+            </div>
+            <div class="summary-card">
+                <div class="icon">⭐</div>
+                <div class="number" th:text="${busiestDay != null ? busiestDay[1] : '0'}">0</div>
+                <div class="label">Peak Day Count</div>
+            </div>
+        </div>
+
+        Report Table Card
+        <div class="report-table-card">
+            <div class="report-table-header">
+                <h3>Day-wise Prescription Statistics</h3>
+                <p>Detailed breakdown of prescriptions by date</p>
+            </div>
+            
+            <div class="table-responsive">
+                <table class="report-table">
+                    <thead>
+                        <tr>
+                            <th>📅 Date</th>
+                            <th>💊 Total Prescriptions</th>
+                            <th>📊 Percentage</th>
+                            <th>⭐ Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="r, stat : ${reportData}" 
+                            th:class="${stat.index == 0} ? 'highlight' : ''">
+                            <td th:text="${r[0]}">Date</td>
+                            <td th:text="${r[1]}">Count</td>
+                old code:
+                            <td th:text="${#numbers.formatDecimal((r[1] / totalPrescriptions) * 100, 1, 1)} + '%'">0%</td>
+                perfect code:
+                            <td th:text="${totalPrescriptions != null ? #numbers.formatDecimal((r[1] / totalPrescriptions) * 100, 1, 1) : 0}">0.0</td>
+                or:
+                    Template-এ direct calculation এর পরিবর্তে
+					<td th:with="percentage=${totalPrescriptions > 0 ? (r[1] / totalPrescriptions) * 100 : 0}">
+						    <span th:text="${#numbers.formatDecimal(percentage, 1, 1)}">0.0</span>%
+					</td>
+				or:
+					Line 104-এ এই code টি replace করুন
+					<td th:text="${totalPrescriptions != null and totalPrescriptions > 0 ? 
+              		#numbers.formatDecimal((r[1] / totalPrescriptions) * 100, 1, 1) : 
+              		0}">0.0</td>
+              		
+                            <td>
+                                <span th:if="${stat.index == 0}" class="status-badge status-active">
+                                    🏆 Peak Day
+                                </span>
+                                <span th:if="${r[1] > averagePerDay && stat.index != 0}" class="status-badge status-pending">
+                                    📈 Above Avg
+                                </span>
+                                <span th:if="${r[1] <= averagePerDay && stat.index != 0}" class="status-badge">
+                                    📉 Normal
+                                </span>
+                            </td>
+                        </tr>
+                        <tr th:if="${reportData.empty}">
+                            <td colspan="4">
+                                <div class="no-report-data">
+                                    <div class="icon">📊</div>
+                                    <h4>No Report Data Available</h4>
+                                    <p>No prescription data found for generating reports.</p>
+                                    <a th:href="@{/prescriptions/create}" class="action-btn primary">
+                                        ➕ Add First Prescription
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        Chart Placeholder
+        <div class="report-chart">
+            <h4>📈 Prescription Trends Visualization</h4>
+            <div class="chart-placeholder">
+                <div class="icon">📊</div>
+                <p>Prescription distribution chart would be displayed here</p>
+                <small>Visual representation of day-wise prescription patterns</small>
+            </div>
+        </div>
+
+        Export Actions
+        <div class="export-actions">
+            <a href="#" class="export-btn">
+                📄 Export as Excel
+            </a>
+            <a href="#" class="export-btn pdf">
+                📊 Export as PDF
+            </a>
+        </div>
+    </div>
+</body>
+</html> -->
+
+
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Prescription Report</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body class="report-page">
+<div class="report-container">
+
+    <!-- Header -->
+    <div class="report-header">
+        <h2>📈 Prescription Analytics Report</h2>
+        <p>Comprehensive day-wise prescription analysis and insights</p>
+    </div>
+
+    <!-- Back Button -->
+    <div class="back-btn-container">
+        <a th:href="@{/prescriptions}" class="back-btn">← Back to Prescription List</a>
+    </div>
+
+    <!-- Summary Section -->
+    <div class="report-summary">
+        <div class="summary-card">
+            <div class="icon">📅</div>
+            <div class="number" th:text="${reportData != null ? #lists.size(reportData) : 0}">0</div>
+            <div class="label">Total Days</div>
+        </div>
+
+        <div class="summary-card">
+            <div class="icon">💊</div>
+            <div class="number" th:text="${totalPrescriptions}">0</div>
+            <div class="label">Total Prescriptions</div>
+        </div>
+
+        <div class="summary-card">
+            <div class="icon">📈</div>
+            <div class="number" th:text="${averagePerDay}">0</div>
+            <div class="label">Avg Per Day</div>
+        </div>
+
+        <div class="summary-card">
+            <div class="icon">⭐</div>
+            <div class="number" th:text="${busiestDay != null ? busiestDay[1] : '0'}">0</div>
+            <div class="label">Peak Day Count</div>
+        </div>
+    </div>
+
+    <!-- Report Table -->
+    <div class="report-table-card">
+        <div class="report-table-header">
+            <h3>Day-wise Prescription Statistics</h3>
+            <p>Detailed breakdown of prescriptions by date</p>
+        </div>
+
+        <div class="table-responsive">
+            <table class="report-table">
+                <thead>
+                    <tr>
+                        <th>📅 Date</th>
+                        <th>💊 Total Prescriptions</th>
+                        <th>📊 Percentage</th>
+                        <th>⭐ Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="r, stat : ${reportData}" th:classappend="${stat.index == 0} ? 'highlight'">
+                        <td th:text="${r[0]}">Date</td>
+                        <td th:text="${r[1]}">Count</td>
+
+                        <td th:text="${totalPrescriptions > 0 ? #numbers.formatDecimal((r[1] / totalPrescriptions) * 100, 1, 1) : 0} + '%'">
+                            0%
+                        </td>
+
+                        <td>
+                            <span th:if="${stat.index == 0}" class="status-badge status-active">🏆 Peak Day</span>
+                            <span th:if="${r[1] > averagePerDay && stat.index != 0}" class="status-badge status-pending">📈 Above Avg</span>
+                            <span th:if="${r[1] <= averagePerDay && stat.index != 0}" class="status-badge">📉 Normal</span>
+                        </td>
+                    </tr>
+
+                    <tr th:if="${#lists.isEmpty(reportData)}">
+                        <td colspan="4">
+                            <div class="no-report-data">
+                                <div class="icon">📊</div>
+                                <h4>No Report Data Available</h4>
+                                <p>No prescription data found for generating reports.</p>
+                                <a th:href="@{/prescriptions/create}" class="action-btn primary">
+                                    ➕ Add First Prescription
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Chart Placeholder -->
+    <div class="report-chart">
+        <h4>📈 Prescription Trends Visualization</h4>
+        <div class="chart-placeholder">
+            <div class="icon">📊</div>
+            <p>Prescription distribution chart will appear here</p>
+            <small>Visual representation of day-wise prescription patterns</small>
+        </div>
+    </div>
+
+    <!-- Export Buttons -->
+    <div class="export-actions">
+        <a href="#" class="export-btn">📄 Export as Excel</a>
+        <a href="#" class="export-btn pdf">📊 Export as PDF</a>
+    </div>
+
+</div>
+</body>
+</html>
